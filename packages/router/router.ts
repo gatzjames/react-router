@@ -2135,6 +2135,14 @@ export function createRouter(init: RouterInit): Router {
           revalidatingFetchers[redirect.idx - matchesToLoad.length].key;
         fetchRedirectIds.add(fetcherKey);
       }
+
+      // Set the submitting fetcher back to idle since we're going to start
+      // a new navigation
+      if (state.fetchers.has(key)) {
+        let doneFetcher = getDoneFetcher(actionResult.data);
+        state.fetchers.set(key, doneFetcher);
+      }
+
       return startRedirectNavigation(state, redirect.result);
     }
 
